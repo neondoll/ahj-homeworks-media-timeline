@@ -1,0 +1,119 @@
+@import "_normalize.css";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body { font-family: "Roboto", sans-serif; background-color: plum; }
+
+#app { display: flex; justify-content: center; align-items: center; height: 100vh; }
+
+.timeline { width: 686px; padding: 60px 33px; }
+
+.timeline__content { height: 622px; overflow-y: auto; }
+
+.timeline__content::-webkit-scrollbar {
+    width: 0.375rem; /* 6px */
+    height: 0.375rem; /* 6px */
+}
+
+.timeline__content::-webkit-scrollbar-thumb {
+    background: purple;
+    border-radius: 0.5rem; /* 8px */
+}
+
+.timeline__posts {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    row-gap: 19px;
+    margin-left: 69px;
+    padding-bottom: 19px;
+}
+
+.timeline__posts--empty::before { display: none; }
+
+.timeline__posts::before {
+    content: "";
+    position: absolute;
+    top: 27px;
+    bottom: 0;
+    left: -51px;
+    width: 17px;
+    background-color: #ffffff;
+    border-right: 1px solid #464646;
+    border-left: 1px solid #464646;
+}
+
+.timeline__post {}
+
+.timeline-post {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 19px 12px;
+    color: #464646;
+    background-color: #ffffff;
+    border-radius: 15px;
+    border: 1px solid #464646;
+}
+
+.timeline-post::before {
+    content: "";
+    position: absolute;
+    top: 11px;
+    left: -59px;
+    width: 32px;
+    height: 32px;
+    background-color: #ffffff;
+    border-radius: 9999px;
+    border: 1px solid #464646;
+}
+
+.timeline-post__description { display: flex; flex-direction: column; gap: 23px; }
+
+.timeline-post__text { font-size: 18px; line-height: 21px; }
+
+.timeline-post__coordinates { font-size: 14px; line-height: 1; }
+
+.timeline-post__datetime {
+    margin-top: -5px;
+    margin-right: -4px;
+    font-size: 14px;
+    line-height: 1;
+    text-wrap: nowrap;
+}
+
+.timeline__form {}
+
+.timeline-form {
+    display: flex;
+    gap: 4px 8px;
+    padding: 4px 8px;
+    background-color: #ffffff;
+    border: 1px solid #464646;
+}
+
+.timeline-form__input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 16px;
+    line-height: 1;
+    border-radius: 15px;
+    border: 1px solid #464646;
+}
+
+.timeline-form__btn-submit {
+    flex-shrink: 0;
+    width: 37px;
+    height: 37px;
+    padding: 8px;
+    color: #ffffff;
+    background-color: mediumseagreen;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition-property: background-color;
+    transition-timing-function: linear;
+    transition-duration: 200ms;
+}
+
+.timeline-form__btn-submit:hover { background-color: seagreen; }
+
+.timeline-form__btn-submit > svg { width: 100%; height: 100%; fill: currentColor; }
