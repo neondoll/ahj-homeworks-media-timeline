@@ -1,13 +1,27 @@
+import { isValidCoordinates } from './validators';
+
 export default class Timeline {
   constructor() {
     this._allPosts = [];
     this._container = undefined;
     this._content = undefined;
+    this._coords = undefined;
     this._element = undefined;
     this._form = undefined;
+    this._modal = undefined;
     this._posts = undefined;
 
+    this.onResetModalForm = this.onResetModalForm.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
+    this.onSubmitModalForm = this.onSubmitModalForm.bind(this);
+  }
+
+  addPost() {
+    const input = this._form.querySelector(Timeline.selectorFormInput);
+
+    this._allPosts.push({ text: input.value, coords: this._coords, time: Date.now() });
+
+    input.value = '';
   }
 
   bindToDOM(container) {
@@ -26,6 +40,13 @@ export default class Timeline {
 
   drawUI() {
     this.checkBinding();
+
+    document.body.insertAdjacentHTML('beforeend', Timeline.markupModal);
+    this._modal = document.body.querySelector(Timeline.selectorModal);
+    const modalForm = this._modal.querySelector('form');
+
+    modalForm.addEventListener('reset', this.onResetModalForm);
+    modalForm.addEventListener('submit', this.onSubmitModalForm);
 
     this._container.innerHTML = Timeline.markup;
     this._element = this._container.querySelector(Timeline.selector);
@@ -51,29 +72,67 @@ export default class Timeline {
     }
   }
 
+  onResetModalForm() {
+    this._modal.classList.remove('active');
+    this._modal.querySelector(Timeline.selectorModalFormHint).textContent = '';
+    this._modal.querySelector(Timeline.selectorModalFormInput).value = '';
+  }
+
   onSubmitForm(event) {
     console.log('onSubmitForm', event);
 
     event.preventDefault();
 
-    const input = this._form.querySelector(Timeline.selectorFormInput);
+    if (this._coords) {
+      this.addPost();
+      this.redrawDOM();
+
+      return;
+    }
 
     this.getGeolocation(
       (position) => {
-        const { latitude, longitude } = position.coords;
+        this._coords = position.coords;
 
-        console.log('lat ' + latitude);
-        console.log('long ' + longitude);
+        console.log('lat ' + this._coords.latitude);
+        console.log('long ' + this._coords.longitude);
 
-        this._allPosts.push({ text: input.value, coords: position.coords, time: Date.now() });
-
-        input.value = '';
+        this.addPost();
         this.redrawDOM();
       },
       (positionError) => {
         console.log(positionError);
+
+        this._modal.classList.add('active');
       },
     );
+  }
+
+  onSubmitModalForm(event) {
+    console.log('onSubmitModalForm', event);
+
+    event.preventDefault();
+
+    const modalFormHint = this._modal.querySelector(Timeline.selectorModalFormHint);
+    const modalFormInput = this._modal.querySelector(Timeline.selectorModalFormInput);
+
+    modalFormHint.textContent = '';
+
+    try {
+      this._coords = isValidCoordinates(modalFormInput.value);
+
+      this.addPost();
+
+      this._modal.classList.remove('active');
+      modalFormInput.value = '';
+
+      this.redrawDOM();
+    }
+    catch (error) {
+      console.error(error);
+
+      modalFormHint.textContent = error.message;
+    }
   }
 
   redrawDOM() {
@@ -115,6 +174,35 @@ export default class Timeline {
     `;
   }
 
+  static get markupModal() {
+    return `
+      <div class="modal-coords">
+        <form class="modal-coords__content">
+          <div class="modal-coords__header">
+            <h2 class="modal-coords__title">Что-то пошло не так</h2>
+          </div>
+          <div class="modal-coords__body">
+            <p class="modal-coords__description">
+              К сожалению, нам не удалось определить ваше местоположение, пожалуйста, дайте
+              разрешение на использование геолокации, либо введите координаты вручную.
+            </p>
+            <div class="modal-coords__form-group">
+              <label class="modal-coords__form-label" for="modal-coords-input">
+                Широта и долгота через запятую
+              </label>
+              <input class="modal-coords__form-input" id="modal-coords-input" placeholder="51.50851, -0.12572">
+              <div class="modal-coords__form-hint"></div>
+            </div>
+          </div>
+          <div class="modal-coords__footer">
+            <button class="modal-coords__btn-reset" type="reset">Отмена</button>
+            <button class="modal-coords__btn-submit" type="submit">OK</button>
+          </div>
+        </form>
+      </div>
+    `;
+  }
+
   static markupPost(post) {
     const postDate = new Date(post.time);
     const postDateYear = postDate.getFullYear();
@@ -147,6 +235,12 @@ export default class Timeline {
   static get selectorForm() { return '.timeline-form'; }
 
   static get selectorFormInput() { return '.timeline-form__input'; }
+
+  static get selectorModal() { return '.modal-coords'; }
+
+  static get selectorModalFormHint() { return '.modal-coords__form-hint'; }
+
+  static get selectorModalFormInput() { return '.modal-coords__form-input'; }
 
   static get selectorPosts() { return '.timeline__posts'; }
 }
