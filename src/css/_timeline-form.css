@@ -1,0 +1,34 @@
+.timeline-form {
+    display: flex;
+    gap: 4px 8px;
+    padding: 4px 8px;
+    background-color: #ffffff;
+    border: 1px solid #464646;
+}
+
+.timeline-form__input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 16px;
+    line-height: 1;
+    border-radius: 15px;
+    border: 1px solid #464646;
+}
+
+.timeline-form__btn-submit {
+    flex-shrink: 0;
+    width: 37px;
+    height: 37px;
+    padding: 8px;
+    color: #ffffff;
+    background-color: mediumseagreen;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition-property: background-color;
+    transition-timing-function: linear;
+    transition-duration: 200ms;
+}
+
+.timeline-form__btn-submit:hover { background-color: seagreen; }
+
+.timeline-form__btn-submit > svg { width: 100%; height: 100%; fill: currentColor; }

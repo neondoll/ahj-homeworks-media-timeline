@@ -1,0 +1,36 @@
+.timeline-post {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 19px 12px;
+    color: #464646;
+    background-color: #ffffff;
+    border-radius: 15px;
+    border: 1px solid #464646;
+}
+
+.timeline-post::before {
+    content: "";
+    position: absolute;
+    top: 11px;
+    left: -59px;
+    width: 32px;
+    height: 32px;
+    background-color: #ffffff;
+    border-radius: 9999px;
+    border: 1px solid #464646;
+}
+
+.timeline-post__description { display: flex; flex-direction: column; gap: 23px; }
+
+.timeline-post__text { font-size: 18px; line-height: 21px; }
+
+.timeline-post__coordinates { font-size: 14px; line-height: 1; }
+
+.timeline-post__datetime {
+    margin-top: -5px;
+    margin-right: -4px;
+    font-size: 14px;
+    line-height: 1;
+    text-wrap: nowrap;
+}

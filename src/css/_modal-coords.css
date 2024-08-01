@@ -1,0 +1,96 @@
+.modal-coords { position: fixed; inset: 0; z-index: -10; }
+
+.modal-coords.active { z-index: 10; background-color: rgba(70, 70, 70, 0.7); }
+
+.modal-coords.active .modal-coords__content { transform: translateX(-50%) translateY(-50%); }
+
+.modal-coords__content {
+    --margin: 80px;
+    position: absolute;
+    top: calc(50% - var(--margin, 0));
+    left: calc(50% - var(--margin, 0));
+    z-index: 20;
+    width: calc(100% - (var(--margin, 0) * 2));
+    max-width: 535px;
+    margin: var(--margin, 0);
+    color: #464646;
+    background-color: #ffffff;
+    border-radius: 15px;
+    border: 1px solid #464646;
+    transition-property: all;
+    transition-timing-function: linear;
+    transition-duration: 300ms;
+    transform: translateX(-50%) translateY(-100vh);
+}
+
+.modal-coords__header { padding: 22px 22px 17px; }
+
+.modal-coords__title { font-size: 18px; font-weight: 400; line-height: 1; }
+
+.modal-coords__body { padding: 0 22px 6px; }
+
+.modal-coords__description { font-size: 18px; line-height: 21px; }
+
+.modal-coords__form-group { margin-top: 21px; }
+
+.modal-coords__form-group > * + * { margin-top: 18px; }
+
+.modal-coords__form-label { font-size: 18px; line-height: 1; }
+
+.modal-coords__form-input {
+    display: block;
+    width: 100%;
+    height: 41px;
+    padding: 9px 14px 8px;
+    font-size: 18px;
+    line-height: 1;
+    border: 1px solid #464646;
+    transition-property: border-color;
+    transition-timing-function: linear;
+    transition-duration: 200ms;
+}
+
+.modal-coords__form-input:focus { border-color: #20b1df; }
+
+.modal-coords__form-hint { font-size: 18px; line-height: 1; color: #ff0000; }
+
+.modal-coords__form-hint:empty { display: none; }
+
+.modal-coords__footer {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 10px;
+    padding: 0 22px 11px;
+}
+
+.modal-coords__btn-reset {
+    padding: 16px 14px;
+    font-size: 18px;
+    line-height: 1;
+    border-radius: 15px;
+    border: 1px solid #464646;
+    cursor: pointer;
+    transition-property: color, background-color;
+    transition-timing-function: linear;
+    transition-duration: 200ms;
+}
+
+.modal-coords__btn-reset:hover { color: #ffffff; background-color: #464646; }
+
+.modal-coords__btn-submit {
+    padding: 16px;
+    font-size: 18px;
+    line-height: 1;
+    border-radius: 15px;
+    border: 1px solid #464646;
+    cursor: pointer;
+    transition-property: color, background-color, border-color;
+    transition-timing-function: linear;
+    transition-duration: 200ms;
+}
+
+.modal-coords__btn-submit:hover {
+    color: #ffffff;
+    background-color: seagreen;
+    border-color: seagreen;
+}

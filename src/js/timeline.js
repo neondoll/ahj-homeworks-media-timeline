@@ -1,8 +1,8 @@
+import TimelineState from './timeline-state';
 import { isValidCoordinates } from './validators';
 
 export default class Timeline {
   constructor() {
-    this._allPosts = [];
     this._container = undefined;
     this._content = undefined;
     this._coords = undefined;
@@ -10,6 +10,7 @@ export default class Timeline {
     this._form = undefined;
     this._modal = undefined;
     this._posts = undefined;
+    this._state = new TimelineState();
 
     this.onResetModalForm = this.onResetModalForm.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
@@ -19,7 +20,7 @@ export default class Timeline {
   addPost() {
     const input = this._form.querySelector(Timeline.selectorFormInput);
 
-    this._allPosts.push({ text: input.value, coords: this._coords, time: Date.now() });
+    this._state.addDataItem(input.value, this._coords);
 
     input.value = '';
   }
@@ -56,6 +57,8 @@ export default class Timeline {
 
     this._form.addEventListener('submit', this.onSubmitForm);
 
+    this._state.loadData();
+
     this.redrawDOM();
   }
 
@@ -85,7 +88,10 @@ export default class Timeline {
 
     if (this._coords) {
       this.addPost();
+
       this.redrawDOM();
+
+      this._state.saveData();
 
       return;
     }
@@ -98,7 +104,10 @@ export default class Timeline {
         console.log('long ' + this._coords.longitude);
 
         this.addPost();
+
         this.redrawDOM();
+
+        this._state.saveData();
       },
       (positionError) => {
         console.log(positionError);
@@ -127,6 +136,8 @@ export default class Timeline {
       modalFormInput.value = '';
 
       this.redrawDOM();
+
+      this._state.saveData();
     }
     catch (error) {
       console.error(error);
@@ -138,12 +149,12 @@ export default class Timeline {
   redrawDOM() {
     this._posts.innerHTML = '';
 
-    if (this._allPosts.length) {
+    if (this._state.data.length) {
       this._posts.style.height = '';
       this._posts.classList.remove('timeline__posts--empty');
 
-      this._allPosts.forEach((post) => {
-        this._posts.insertAdjacentHTML('afterbegin', Timeline.markupPost(post));
+      this._state.data.forEach((item) => {
+        this._posts.insertAdjacentHTML('afterbegin', Timeline.markupPost(item));
       });
 
       this._posts.style.height = this._posts.offsetHeight > this._content.offsetHeight
